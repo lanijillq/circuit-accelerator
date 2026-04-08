@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Circuit · Investor Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #000000; --white: #ffffff;
+  --red: #e8001d; --blue: #0033ff; --green: #006400;
+  --gray: #888888; --gray-light: #cccccc; --gray-dark: #1a1a1a;
+  --border: rgba(255,255,255,0.12); --border-hi: rgba(255,255,255,0.3);
+  --font: 'Space Grotesk', sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font); background: var(--black); color: var(--white); min-height: 100vh; }
+
+/* ── SITE HEADER ── */
+.site-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 52px;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--black); z-index: 50;
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-icon { width: 28px; height: 28px; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.logo-icon svg { width: 15px; height: 15px; fill: var(--black); }
+.logo-wordmark { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--white); }
+.header-right { display: flex; align-items: center; gap: 14px; }
+.header-meta { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); }
+.header-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--white); color: var(--white); }
+
+/* ── HERO ── */
+.hero { display: grid; grid-template-columns: 1fr 320px; border-bottom: 1px solid var(--border); }
+.hero-left { padding: 2.5rem 2rem; border-right: 1px solid var(--border); }
+.hero-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 1rem; }
+.hero-title { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 1rem; }
+.hero-title em { color: var(--red); font-style: normal; }
+.hero-sub { font-size: 13px; color: var(--gray-light); line-height: 1.7; max-width: 360px; }
+.hero-right { display: flex; flex-direction: column; }
+.step-overview { flex: 1; }
+.step-ov-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 1.5rem; border-bottom: 1px solid var(--border);
+}
+.step-ov-item:last-child { border-bottom: none; }
+.step-ov-num {
+  width: 22px; height: 22px; border: 1px solid var(--border-hi);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; flex-shrink: 0; color: var(--gray);
+}
+.step-ov-label { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--gray-light); }
+.step-ov-item.current .step-ov-num { background: var(--white); color: var(--black); border-color: var(--white); }
+.step-ov-item.current .step-ov-label { color: var(--white); }
+.step-ov-item.done .step-ov-num { background: var(--green); border-color: var(--green); color: var(--white); }
+.step-ov-item.done .step-ov-label { color: var(--gray); }
+
+/* ── PROGRESS ── */
+.progress-strip { height: 2px; background: var(--border); }
+.progress-fill { height: 2px; background: var(--white); transition: width 0.35s; }
+
+/* ── FORM SHELL ── */
+.form-shell { display: grid; grid-template-columns: 1fr 280px; min-height: calc(100vh - 52px - 180px); }
+.form-main { padding: 2rem; border-right: 1px solid var(--border); }
+.form-sidebar { padding: 1.5rem; }
+
+/* ── STEP ── */
+.step { display: none; }
+.step.active { display: block; }
+.step-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 8px; }
+.step-title { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 6px; color: var(--white); }
+.step-sub { font-size: 12px; color: var(--gray-light); line-height: 1.7; margin-bottom: 1.75rem; max-width: 440px; }
+.step-divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+/* ── FIELDS ── */
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray-light); margin-bottom: 6px; }
+.field .hint { font-size: 11px; color: var(--gray); margin-bottom: 6px; margin-top: -3px; line-height: 1.5; }
+.field input, .field select, .field textarea {
+  width: 100%; font-size: 13px; font-family: var(--font);
+  padding: 9px 12px; border: 1px solid var(--border);
+  background: var(--gray-dark); color: var(--white); outline: none;
+  appearance: none; -webkit-appearance: none;
+}
+.field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--white); }
+.field textarea { resize: vertical; min-height: 72px; line-height: 1.55; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* ── CHECK ITEMS ── */
+.check-group { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.check-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px; border: 1px solid var(--border); cursor: pointer; background: var(--gray-dark); transition: border-color 0.12s; }
+.check-item:hover { border-color: var(--border-hi); }
+.check-item.sel { border-color: var(--white); background: #111; }
+.chk-box { width: 14px; height: 14px; border: 1px solid var(--border-hi); flex-shrink: 0; margin-top: 2px; display: flex; align-items: center; justify-content: center; }
+.check-item.sel .chk-box { background: var(--white); border-color: var(--white); }
+.chk-tick { display: none; }
+.check-item.sel .chk-tick { display: block; }
+.chk-lbl { font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; }
+.chk-sub { font-size: 11px; color: var(--gray); margin-top: 2px; line-height: 1.4; }
+
+/* ── RADIO CARDS ── */
+.radio-row { display: grid; gap: 6px; margin-top: 4px; }
+.radio-card { border: 1px solid var(--border); padding: 10px 12px; cursor: pointer; text-align: center; background: var(--gray-dark); transition: border-color 0.12s; }
+.radio-card:hover { border-color: var(--border-hi); }
+.radio-card.sel { border-color: var(--white); background: #111; }
+.radio-val { font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; }
+.radio-lbl { font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray); margin-top: 3px; }
+
+/* ── TAG PILLS ── */
+.tag-wrap { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.tag { padding: 5px 12px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--border); background: var(--gray-dark); color: var(--gray); cursor: pointer; }
+.tag.sel { background: var(--white); color: var(--black); border-color: var(--white); }
+.tag:hover:not(.sel) { border-color: var(--border-hi); color: var(--gray-light); }
+
+/* ── SECTOR CARDS ── */
+.sector-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 4px; }
+.sector-card { border: 1px solid var(--border); padding: 12px 13px; cursor: pointer; background: var(--gray-dark); transition: border-color 0.12s; }
+.sector-card:hover { border-color: var(--border-hi); }
+.sector-card.sel { border-color: var(--white); background: #111; }
+.sec-icon { font-size: 18px; margin-bottom: 5px; }
+.sec-name { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; margin-bottom: 4px; }
+.sec-pill { font-size: 9px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border: 1px solid; display: inline-block; margin-bottom: 5px; }
+.sec-desc { font-size: 11px; color: var(--gray); line-height: 1.5; }
+.sec-count { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gray); margin-top: 8px; }
+
+/* ── NAV ── */
+.nav-row { display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.btn-back { padding: 10px 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--border-hi); background: none; color: var(--gray-light); cursor: pointer; font-family: var(--font); }
+.btn-back:hover { border-color: var(--white); color: var(--white); }
+.btn-next { padding: 10px 24px; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border: none; background: var(--white); color: var(--black); cursor: pointer; font-family: var(--font); }
+.btn-next:hover { background: var(--gray-light); }
+.btn-next.red { background: var(--red); color: var(--white); }
+.btn-next.red:hover { opacity: 0.88; }
+
+/* ── SUMMARY ── */
+.summary-block { border: 1px solid var(--border); margin-bottom: 8px; }
+.summary-head { padding: 8px 12px; border-bottom: 1px solid var(--border); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); background: #0d0d0d; }
+.sum-row { display: flex; justify-content: space-between; padding: 7px 12px; border-bottom: 1px solid var(--border); font-size: 12px; }
+.sum-row:last-child { border-bottom: none; }
+.sum-key { color: var(--gray); }
+.sum-val { color: var(--white); font-weight: 700; max-width: 55%; text-align: right; font-size: 11px; }
+
+/* ── PRIVACY ── */
+.privacy-box { border: 1px solid var(--border); padding: 12px 14px; margin-top: 1rem; background: #0d0d0d; }
+.privacy-box p { font-size: 11px; color: var(--gray); line-height: 1.65; }
+
+/* ── SUCCESS ── */
+.success { text-align: center; padding: 3rem 1rem; }
+.success-ring { width: 56px; height: 56px; border: 2px solid var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; }
+.success-title { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 10px; }
+.success-sub { font-size: 13px; color: var(--gray-light); line-height: 1.7; max-width: 380px; margin: 0 auto 2rem; }
+.next-steps { display: flex; flex-direction: column; gap: 6px; text-align: left; }
+.ns { display: flex; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); align-items: flex-start; }
+.ns-num { width: 20px; height: 20px; background: var(--white); color: var(--black); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.ns-txt { font-size: 12px; color: var(--gray-light); line-height: 1.6; }
+.ns-txt strong { color: var(--white); font-weight: 700; }
+
+/* ── SIDEBAR ── */
+.sidebar-head { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-bottom: 1rem; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.sidebar-fact { margin-bottom: 1.1rem; padding-bottom: 1.1rem; border-bottom: 1px solid var(--border); }
+.sidebar-fact:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.sidebar-fact-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gray); margin-bottom: 4px; }
+.sidebar-fact-val { font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: -0.01em; line-height: 1.4; }
+.sidebar-fact-val.accent-red { color: var(--red); font-size: 22px; }
+.sidebar-note { font-size: 11px; color: var(--gray); line-height: 1.55; margin-top: 3px; }
+
+/* ── DOTS STRIP ── */
+.dots-strip { display: flex; gap: 5px; margin-bottom: 1.5rem; }
+.dot { width: 6px; height: 6px; background: var(--border-hi); }
+.dot.done { background: var(--green); }
+.dot.active { background: var(--white); width: 22px; }
+
+@media(max-width:720px){
+  .hero { grid-template-columns: 1fr; }
+  .hero-left { border-right: none; border-bottom: 1px solid var(--border); }
+  .hero-right { display: none; }
+  .form-shell { grid-template-columns: 1fr; }
+  .form-sidebar { display: none; }
+  .two-col { grid-template-columns: 1fr; }
+  .sector-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 20 20"><path d="M10 2C5.58 2 2 5.58 2 10s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 2c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6 2.69-6 6-6zm0 2a4 4 0 100 8 4 4 0 000-8zm0 2a2 2 0 110 4 2 2 0 010-4z"/></svg>
+    </div>
+    <span class="logo-wordmark">Circuit</span>
+  </div>
+  <div class="header-right">
+    <span class="header-meta">Investor application &nbsp;·&nbsp; Cohort 1</span>
+    <span class="header-badge">2026</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">NewCampus × Base × Soul World Bank</div>
+    <h1 class="hero-title">Apply as an<br><em>investor</em><br>partner.</h1>
+    <p class="hero-sub">Pre-qualify for early access to Circuit's cohort data room, express interest in founders before the programme begins, and secure your Friday Singapore meeting slots. ~10 minutes.</p>
+  </div>
+  <div class="hero-right">
+    <div class="step-overview" id="step-overview"></div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<div class="progress-strip"><div class="progress-fill" id="prog" style="width:16%"></div></div>
+
+<!-- FORM SHELL -->
+<div class="form-shell">
+  <div class="form-main">
+    <div class="dots-strip" id="dots"></div>
+
+    <!-- STEP 1 -->
+    <div class="step active" id="s0">
+      <div class="step-tag">Step 1 of 6</div>
+      <div class="step-title">Who are you?</div>
+      <div class="step-sub">All information is confidential — used only for cohort matching and scheduling.</div>
+      <div class="two-col">
+        <div class="field"><label>Full name</label><input type="text" placeholder="Sarah Tan" id="f-name"></div>
+        <div class="field"><label>Fund or firm</label><input type="text" placeholder="Dragonfly Capital" id="f-firm"></div>
+      </div>
+      <div class="field"><label>Title / role</label><input type="text" placeholder="General Partner, Solo GP, Family Office Principal"></div>
+      <div class="two-col">
+        <div class="field"><label>Email</label><input type="email" placeholder="you@fund.com"></div>
+        <div class="field"><label>LinkedIn or X</label><input type="text" placeholder="URL"></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Based in</label>
+          <select id="f-loc"><option value="">Select city</option><option>Singapore</option><option>Hong Kong</option><option>Kuala Lumpur</option><option>Jakarta</option><option>Ho Chi Minh City</option><option>Manila</option><option>Mumbai</option><option>Dubai</option><option>London</option><option>New York</option><option>Other</option></select>
+        </div>
+        <div class="field"><label>How did you hear about Circuit?</label>
+          <select><option value="">Select</option><option>NewCampus network</option><option>Base / Coinbase</option><option>Soul World Bank</option><option>Friend or colleague</option><option>Twitter / X</option><option>Event</option><option>Other</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="s1">
+      <div class="step-tag">Step 2 of 6</div>
+      <div class="step-title">Investment profile</div>
+      <div class="step-sub">Help us understand how you invest so we can match you with the right founders from Day 1.</div>
+      <div class="field"><label>Investor type</label>
+        <div class="check-group">
+          <div class="check-item" onclick="solo(this,'it')"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Venture capital fund</div><div class="chk-sub">Institutional LP-backed fund deploying from a formal vehicle</div></div></div>
+          <div class="check-item" onclick="solo(this,'it')"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Angel / solo GP</div><div class="chk-sub">Investing personal capital or running a small syndicate</div></div></div>
+          <div class="check-item" onclick="solo(this,'it')"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Family office</div><div class="chk-sub">Deploying capital on behalf of a family or HNWI</div></div></div>
+          <div class="check-item" onclick="solo(this,'it')"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Corporate / strategic investor</div><div class="chk-sub">Investing on behalf of a company for strategic positioning</div></div></div>
+        </div>
+      </div>
+      <div class="field"><label>Typical cheque size</label>
+        <div class="radio-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="radio-card" onclick="solo(this,'ck')"><div class="radio-val">$25K–$100K</div><div class="radio-lbl">Angel</div></div>
+          <div class="radio-card" onclick="solo(this,'ck')"><div class="radio-val">$100K–$500K</div><div class="radio-lbl">Early Seed</div></div>
+          <div class="radio-card" onclick="solo(this,'ck')"><div class="radio-val">$500K–$2M</div><div class="radio-lbl">Seed</div></div>
+          <div class="radio-card" onclick="solo(this,'ck')"><div class="radio-val">$2M–$5M</div><div class="radio-lbl">Series A</div></div>
+          <div class="radio-card" onclick="solo(this,'ck')"><div class="radio-val">$5M+</div><div class="radio-lbl">Growth</div></div>
+          <div class="radio-card" onclick="solo(this,'ck')"><div class="radio-val">Flexible</div><div class="radio-lbl">Deal by deal</div></div>
+        </div>
+      </div>
+      <div class="field"><label>Preferred stage</label>
+        <div class="tag-wrap"><span class="tag" onclick="tog(this)">Pre-seed</span><span class="tag" onclick="tog(this)">Seed</span><span class="tag" onclick="tog(this)">Series A</span><span class="tag" onclick="tog(this)">Series B+</span><span class="tag" onclick="tog(this)">TGE / token round</span><span class="tag" onclick="tog(this)">Any stage</span></div>
+      </div>
+      <div class="field"><label>Web3 / on-chain mandate?</label>
+        <div class="radio-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="radio-card" onclick="solo(this,'w3')"><div class="radio-val">Yes</div><div class="radio-lbl">Core mandate</div></div>
+          <div class="radio-card" onclick="solo(this,'w3')"><div class="radio-val">Exploring</div><div class="radio-lbl">Open to it</div></div>
+          <div class="radio-card" onclick="solo(this,'w3')"><div class="radio-val">Agnostic</div><div class="radio-lbl">Sector-first</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="s2">
+      <div class="step-tag">Step 3 of 6</div>
+      <div class="step-title">Pick your sectors</div>
+      <div class="step-sub">Select every category you'd actively consider deploying into. Used to pre-match you with founders before Sprint 3 Friday sessions.</div>
+      <div class="sector-grid" id="sec-grid">
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">🤖</div><div class="sec-name">Move-to-earn & robotics</div>
+          <span class="sec-pill" style="border-color:#4caf50;color:#4caf50;">Physical + onchain</span>
+          <div class="sec-desc">Physical activity or robot task completion verified and rewarded on-chain — fitness apps with token incentives, autonomous robot staking on Base, DePIN for logistics.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">🏥</div><div class="sec-name">Healthcare & biodata</div>
+          <span class="sec-pill" style="border-color:#e8001d;color:#e8001d;">Data sovereignty</span>
+          <div class="sec-desc">Patient-consented health data monetisation, on-chain clinical trial credentialing, insurance underwriting via verified health records. 650M+ underserved in SEA.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">📡</div><div class="sec-name">Data collection & DePIN</div>
+          <span class="sec-pill" style="border-color:#888;color:#888;">Infrastructure</span>
+          <div class="sec-desc">Decentralised physical infrastructure — IoT sensors, weather nodes, traffic oracles — staking and rewards settled on Base. Operators earn for real-world data.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">💸</div><div class="sec-name">Payments & remittance</div>
+          <span class="sec-pill" style="border-color:#4d8fff;color:#4d8fff;">High volume</span>
+          <div class="sec-desc">Stablecoin corridors, OFW rails, merchant settlement. $669B+ flows through SEA remittance annually. On-chain cuts fees from 6% to under 0.5%.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">🎮</div><div class="sec-name">Consumer & GameFi</div>
+          <span class="sec-pill" style="border-color:#e8001d;color:#e8001d;">High traction</span>
+          <div class="sec-desc">Prediction markets, play-to-earn, on-chain loyalty. 250M+ mobile gamers in SEA. Base Mini Apps lower friction for mainstream onboarding.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">🏦</div><div class="sec-name">DeFi & credit</div>
+          <span class="sec-pill" style="border-color:#4d8fff;color:#4d8fff;">Revenue-generating</span>
+          <div class="sec-desc">Undercollateralised lending, yield optimisation, on-chain credit scoring for SEA SMEs and gig workers. $800B+ SME credit gap in Southeast Asia.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">🪪</div><div class="sec-name">Identity & compliance</div>
+          <span class="sec-pill" style="border-color:#4caf50;color:#4caf50;">ZK-enabled</span>
+          <div class="sec-desc">ZK-proof KYC, privacy-preserving credential sharing, on-chain regulatory compliance tooling. Critical infra as DeFi matures across SG, MY, PH.</div>
+        </div>
+        <div class="sector-card" onclick="togSec(this)">
+          <div class="sec-icon">🌏</div><div class="sec-name">Emerging market infra</div>
+          <span class="sec-pill" style="border-color:#888;color:#888;">SEA-native</span>
+          <div class="sec-desc">Last-mile infra solving real problems in VN, PH, ID, MY, IN — agri-fintech, microinsurance, rural connectivity on Base.</div>
+        </div>
+      </div>
+      <div class="sec-count" id="sc">0 sectors selected</div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step" id="s3">
+      <div class="step-tag">Step 4 of 6</div>
+      <div class="step-title">Thesis & track record</div>
+      <div class="step-sub">A version of your profile is shared with founders before Friday meetings — no contact details, just your thesis and value-add.</div>
+      <div class="field">
+        <label>Your investment thesis in 1–2 sentences</label>
+        <div class="hint">What do you believe that most investors don't yet?</div>
+        <textarea placeholder="e.g. We believe the next wave of DeFi will come from SEA founders solving real payment problems, not speculation. We back founders who've lived the problem."></textarea>
+      </div>
+      <div class="field"><label>Invested in Base / Web3 before?</label>
+        <div class="radio-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="radio-card" onclick="solo(this,'w3x')"><div class="radio-val">Yes</div><div class="radio-lbl">Multiple times</div></div>
+          <div class="radio-card" onclick="solo(this,'w3x')"><div class="radio-val">Once or twice</div><div class="radio-lbl">Early days</div></div>
+          <div class="radio-card" onclick="solo(this,'w3x')"><div class="radio-val">Not yet</div><div class="radio-lbl">First time</div></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Relevant portfolio companies (optional)</label>
+        <div class="hint">Helps us understand your pattern recognition.</div>
+        <textarea placeholder="e.g. Pencil Finance (on-chain student loans, SEA), HackQuest (Web3 dev education)." style="min-height:56px;"></textarea>
+      </div>
+      <div class="field"><label>What do you bring beyond capital?</label>
+        <div class="tag-wrap"><span class="tag" onclick="tog(this)">SEA market access</span><span class="tag" onclick="tog(this)">Regulatory / compliance</span><span class="tag" onclick="tog(this)">BD & partnerships</span><span class="tag" onclick="tog(this)">Token / TGE structuring</span><span class="tag" onclick="tog(this)">Follow-on capital</span><span class="tag" onclick="tog(this)">Talent network</span><span class="tag" onclick="tog(this)">Technical due diligence</span><span class="tag" onclick="tog(this)">Press & media</span><span class="tag" onclick="tog(this)">Exchange / listing intros</span></div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step" id="s4">
+      <div class="step-tag">Step 5 of 6</div>
+      <div class="step-title">Commitment & logistics</div>
+      <div class="step-sub">By the time you meet a founder on a Friday, you've already seen their deck, their numbers, and their full application. These are follow-ups — not cold intros.</div>
+      <div class="field"><label>Which Friday sessions can you attend? &nbsp;·&nbsp; Coinbase SG, One-North · 10AM–6PM</label>
+        <div class="check-group">
+          <div class="check-item" onclick="multi(this)"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Sprint 3 Friday — first investor day</div><div class="chk-sub">Founders present traction + product. Ideal for a first meeting.</div></div></div>
+          <div class="check-item" onclick="multi(this)"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Sprint 4 Friday — deeper due diligence day</div><div class="chk-sub">Updated metrics + pitch deck v2. Best for follow-up DD conversations.</div></div></div>
+          <div class="check-item" onclick="multi(this)"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Sprint 5 Friday — pre-Demo Day final meeting</div><div class="chk-sub">Full pitch run. Term sheet conversations expected.</div></div></div>
+          <div class="check-item" onclick="multi(this)"><div class="chk-box"><svg class="chk-tick" width="8" height="8" viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2" fill="none" stroke="black" stroke-width="1.8"/></svg></div><div><div class="chk-lbl">Demo Day (Sprint 6)</div><div class="chk-sub">Full cohort pitch event. Coinbase SG or The Network School, Malaysia.</div></div></div>
+        </div>
+      </div>
+      <div class="field"><label>Time to term sheet once interested?</label>
+        <div class="radio-row" style="grid-template-columns:repeat(3,1fr);">
+          <div class="radio-card" onclick="solo(this,'spd')"><div class="radio-val">2–4 weeks</div><div class="radio-lbl">Fast mover</div></div>
+          <div class="radio-card" onclick="solo(this,'spd')"><div class="radio-val">1–2 months</div><div class="radio-lbl">Standard</div></div>
+          <div class="radio-card" onclick="solo(this,'spd')"><div class="radio-val">3+ months</div><div class="radio-lbl">Committee</div></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Automatic "yes" signal</label>
+        <div class="hint">Goes into our matching brief — founders know what you're looking for.</div>
+        <textarea placeholder="e.g. Live on Base mainnet with $50K+ MRR and a clear path to $1M ARR within 12 months."></textarea>
+      </div>
+      <div class="field">
+        <label>Automatic "no"</label>
+        <div class="hint">Honest answers mean better matches and no wasted Fridays.</div>
+        <textarea placeholder="e.g. Pre-revenue. No on-chain component. Purely speculative token mechanics." style="min-height:52px;"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step" id="s5">
+      <div class="step-tag">Step 6 of 6</div>
+      <div class="step-title">Review & submit</div>
+      <div class="step-sub">We'll review your profile within 3 working days and send you access to the Circuit investor data room.</div>
+      <div class="summary-block">
+        <div class="summary-head">About you</div>
+        <div class="sum-row"><span class="sum-key">Name</span><span class="sum-val" id="s-name">—</span></div>
+        <div class="sum-row"><span class="sum-key">Firm</span><span class="sum-val" id="s-firm">—</span></div>
+        <div class="sum-row"><span class="sum-key">Location</span><span class="sum-val" id="s-loc">—</span></div>
+      </div>
+      <div class="summary-block">
+        <div class="summary-head">Investment profile</div>
+        <div class="sum-row"><span class="sum-key">Sectors selected</span><span class="sum-val" id="s-sec">—</span></div>
+        <div class="sum-row"><span class="sum-key">Cheque size</span><span class="sum-val" id="s-ck">—</span></div>
+        <div class="sum-row"><span class="sum-key">Friday sessions</span><span class="sum-val" id="s-days">—</span></div>
+      </div>
+      <div class="field" style="margin-top:1rem;">
+        <label>Anything else to add?</label>
+        <textarea placeholder="Co-investors you're close to, specific founders you've heard about, intro preferences, etc." style="min-height:52px;"></textarea>
+      </div>
+      <div class="privacy-box">
+        <p>Your profile is confidential and shared only with NewCampus programme staff. A summary (no financials, no contact details) may be used to match you with founders before Friday sessions. You control which founders see your profile in the data room.</p>
+      </div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div class="step" id="s-done">
+      <div class="success">
+        <div class="success-ring">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><polyline points="4,11 9,16 18,6" fill="none" stroke="white" stroke-width="2"/></svg>
+        </div>
+        <div class="success-title">Application received.</div>
+        <div class="success-sub">Welcome to Circuit's investor network. We'll review your profile and send data room access within 3 working days.</div>
+        <div class="next-steps">
+          <div class="ns"><div class="ns-num">1</div><div class="ns-txt"><strong>Data room access</strong> — Browse all founder snapshots, filter by sector, read full application responses.</div></div>
+          <div class="ns"><div class="ns-num">2</div><div class="ns-txt"><strong>Express interest</strong> — Flag founders before Sprint 3. NC uses this to pre-allocate your Friday slots.</div></div>
+          <div class="ns"><div class="ns-num">3</div><div class="ns-txt"><strong>Warm intro sent</strong> — NC sends both parties a brief before your first Friday meeting. No cold rooms.</div></div>
+          <div class="ns"><div class="ns-num">4</div><div class="ns-txt"><strong>Friday in Singapore</strong> — 45-min 1:1s at Coinbase SG, One-North. Founders arrive from The Network School (MY).</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAV -->
+    <div class="nav-row" id="nav">
+      <button class="btn-back" id="bbk" onclick="back()" style="visibility:hidden;">← Back</button>
+      <button class="btn-next" id="bnx" onclick="next()">Next →</button>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="form-sidebar" id="sidebar">
+    <div class="sidebar-head">Why Circuit</div>
+    <div class="sidebar-fact">
+      <div class="sidebar-fact-label">Total raising (Cohort 1)</div>
+      <div class="sidebar-fact-val accent-red">$7.4M</div>
+      <div class="sidebar-note">Across 6 pre-screened, Base-native SEA founders — all with live products.</div>
+    </div>
+    <div class="sidebar-fact">
+      <div class="sidebar-fact-label">Your access model</div>
+      <div class="sidebar-fact-val">Not mentoring — capital deploying.</div>
+      <div class="sidebar-note">You meet founders who have already been introduced to you via the data room. Every Friday session is a warm follow-up, not a cold pitch.</div>
+    </div>
+    <div class="sidebar-fact">
+      <div class="sidebar-fact-label">Meeting format</div>
+      <div class="sidebar-fact-val">45-min 1:1 slots</div>
+      <div class="sidebar-note">Coinbase SG, One-North. Sprints 3, 4, 5 — one Friday per sprint. Lunch provided.</div>
+    </div>
+    <div class="sidebar-fact">
+      <div class="sidebar-fact-label">Lead time</div>
+      <div class="sidebar-fact-val">Briefing 72hrs prior</div>
+      <div class="sidebar-note">You receive the founder's updated deck, metrics snapshot, and application summary before every meeting.</div>
+    </div>
+    <div class="sidebar-fact">
+      <div class="sidebar-fact-label">Operated by</div>
+      <div class="sidebar-fact-val">NewCampus × Base × Soul World Bank</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+const N=6; let cur=0;
+const steps=[
+  {label:'Who are you?'},{label:'Investment profile'},{label:'Sector selection'},
+  {label:'Thesis & track record'},{label:'Commitment & logistics'},{label:'Review & submit'}
+];
+
+function renderOverview(){
+  const el=document.getElementById('step-overview');
+  el.innerHTML=steps.map((s,i)=>`
+    <div class="step-ov-item ${i<cur?'done':i===cur?'current':''}">
+      <div class="step-ov-num">${i<cur?'✓':i+1}</div>
+      <div class="step-ov-label">${s.label}</div>
+    </div>`).join('');
+}
+
+function renderDots(){
+  const dc=document.getElementById('dots'); dc.innerHTML='';
+  for(let i=0;i<N;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i<cur?' done':i===cur?' active':'');
+    dc.appendChild(d);
+  }
+}
+
+function render(){
+  const pct=Math.round((cur+1)/N*100);
+  document.getElementById('prog').style.width=pct+'%';
+  renderDots(); renderOverview();
+  document.getElementById('bbk').style.visibility=cur===0?'hidden':'visible';
+  const nx=document.getElementById('bnx');
+  if(cur===N-1){nx.textContent='Submit application →';nx.classList.add('red');}
+  else{nx.textContent='Next →';nx.classList.remove('red');}
+}
+
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(n>=N?'s-done':'s'+n).classList.add('active');
+  if(n>=N){document.getElementById('nav').style.display='none';document.getElementById('sidebar').style.display='none';}
+}
+
+function next(){
+  if(cur===N-1){fillSummary();cur=N;showStep(cur);return;}
+  if(cur===N-2)fillSummary();
+  cur++;showStep(cur);render();window.scrollTo(0,0);
+}
+function back(){if(cur<=0)return;cur--;showStep(cur);render();window.scrollTo(0,0);}
+function solo(el,g){document.querySelectorAll('[onclick*="\''+g+'\'"]').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');}
+function multi(el){el.classList.toggle('sel');}
+function tog(el){el.classList.toggle('sel');}
+function togSec(el){
+  el.classList.toggle('sel');
+  const c=document.querySelectorAll('#sec-grid .sector-card.sel').length;
+  document.getElementById('sc').textContent=c+' sector'+(c!==1?'s':'')+' selected';
+}
+function fillSummary(){
+  document.getElementById('s-name').textContent=document.getElementById('f-name').value||'—';
+  document.getElementById('s-firm').textContent=document.getElementById('f-firm').value||'—';
+  document.getElementById('s-loc').textContent=document.getElementById('f-loc').value||'—';
+  const secs=[...document.querySelectorAll('#sec-grid .sector-card.sel')].map(c=>c.querySelector('.sec-name').textContent);
+  document.getElementById('s-sec').textContent=secs.length?secs.join(', '):'—';
+  const ck=document.querySelector('[onclick*="\'ck\'"].sel');
+  document.getElementById('s-ck').textContent=ck?ck.querySelector('.radio-val').textContent:'—';
+  const days=[...document.querySelectorAll('#s4 .check-item.sel .chk-lbl')].map(e=>e.textContent.split('—')[0].trim());
+  document.getElementById('s-days').textContent=days.length?days.join('; '):'—';
+}
+render();
+</script>
+</body>
+</html>
