@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Circuit — Privacy & Data Use Agreement</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:    #000000;
+    --white:    #FFFFFF;
+    --red:      #E8001C;
+    --blue:     #0052FF;
+    --green:    #00A550;
+    --gray:     #6B6B6B;
+    --gray-dark:#1A1A1A;
+    --gray-mid: #2C2C2C;
+    --border:   rgba(255,255,255,0.10);
+    --border-solid: #2C2C2C;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* noise */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.03; pointer-events: none; z-index: 0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 40px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,0,0,0.93);
+    backdrop-filter: blur(16px);
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px; font-weight: 600; letter-spacing: -0.02em;
+    color: var(--white); text-decoration: none;
+  }
+
+  .logo svg { width: 26px; height: 26px; }
+
+  .header-right {
+    display: flex; align-items: center; gap: 20px;
+  }
+
+  .header-tag {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray);
+  }
+
+  .header-apply {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--white); text-decoration: none;
+    padding: 8px 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: all 0.18s;
+  }
+  .header-apply:hover { background: var(--white); color: var(--black); }
+
+  /* ── LAYOUT ── */
+  .page-wrap {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+    padding-top: 61px;
+  }
+
+  /* ── SIDEBAR ── */
+  aside {
+    position: sticky; top: 61px;
+    height: calc(100vh - 61px);
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+    padding: 48px 28px 48px 40px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+
+  aside::-webkit-scrollbar { width: 0; }
+
+  .aside-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gray); margin-bottom: 16px; margin-top: 24px;
+  }
+  .aside-label:first-child { margin-top: 0; }
+
+  .nav-link {
+    display: block;
+    font-size: 12px; font-weight: 400;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    padding: 6px 0 6px 12px;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .nav-link:hover { color: var(--white); border-left-color: var(--gray-mid); }
+  .nav-link.active { color: var(--white); border-left-color: var(--blue); }
+  .nav-link.sub { padding-left: 24px; font-size: 11px; }
+
+  .aside-version {
+    margin-top: auto; padding-top: 32px;
+    font-size: 11px; color: var(--gray);
+    line-height: 1.6;
+  }
+
+  .aside-version strong { color: rgba(255,255,255,0.5); display: block; }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    padding: 64px 80px 120px 72px;
+    max-width: 800px;
+  }
+
+  /* ── HERO ── */
+  .hero { margin-bottom: 64px; }
+
+  .colour-band {
+    display: flex; height: 3px; margin-bottom: 40px;
+  }
+  .colour-band span { flex: 1; }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 24px;
+  }
+  .hero-eyebrow span {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--gray);
+  }
+  .accent-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+
+  .hero h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700; letter-spacing: -0.03em; line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .hero-sub {
+    font-size: 15px; font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px; line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  /* meta strip */
+  .meta-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .meta-item {
+    padding: 16px 20px;
+    border-right: 1px solid var(--border);
+  }
+  .meta-item:last-child { border-right: none; }
+  .meta-item-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gray); margin-bottom: 4px;
+  }
+  .meta-item-value {
+    font-size: 13px; font-weight: 500; color: var(--white);
+  }
+
+  /* ── AUDIENCE TOGGLE ── */
+  .audience-toggle {
+    display: flex; gap: 0;
+    margin-bottom: 48px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+  .toggle-btn {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 10px 24px;
+    background: transparent; color: var(--gray);
+    border: none; cursor: pointer; transition: all 0.18s;
+  }
+  .toggle-btn.active { background: var(--white); color: var(--black); }
+  .toggle-btn:first-child { border-right: 1px solid var(--border); }
+
+  .founder-section { display: block; }
+  .investor-section { display: block; }
+  body.show-founders .investor-only { opacity: 0.3; pointer-events: none; }
+  body.show-investors .founder-only { opacity: 0.3; pointer-events: none; }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 72px; scroll-margin-top: 100px; }
+
+  .section-header {
+    display: flex; align-items: baseline; gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-solid);
+  }
+
+  .section-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gray); flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.02em; color: var(--white);
+  }
+
+  h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 600;
+    letter-spacing: -0.01em; color: var(--white);
+    margin-top: 32px; margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 14px; color: rgba(255,255,255,0.75);
+    font-weight: 300; line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  ul {
+    list-style: none; margin-bottom: 16px;
+  }
+
+  ul li {
+    font-size: 14px; color: rgba(255,255,255,0.7);
+    font-weight: 300; line-height: 1.7;
+    padding: 6px 0 6px 20px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  ul li:last-child { border-bottom: none; }
+
+  ul li::before {
+    content: '–';
+    position: absolute; left: 0;
+    color: var(--gray);
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    display: flex; gap: 16px;
+    padding: 18px 20px;
+    border: 1px solid var(--border);
+    margin: 20px 0;
+    position: relative;
+  }
+  .callout::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px;
+  }
+  .callout.blue::before  { background: var(--blue); }
+  .callout.green::before { background: var(--green); }
+  .callout.red::before   { background: var(--red); }
+  .callout.gray::before  { background: var(--gray); }
+
+  .callout-icon { flex-shrink: 0; margin-top: 1px; }
+
+  .callout-body { flex: 1; }
+  .callout-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .callout.blue  .callout-label { color: var(--blue); }
+  .callout.green .callout-label { color: var(--green); }
+  .callout.red   .callout-label { color: var(--red); }
+  .callout.gray  .callout-label { color: var(--gray); }
+
+  .callout p {
+    font-size: 13px; color: rgba(255,255,255,0.7);
+    margin-bottom: 0; line-height: 1.65;
+  }
+
+  /* ── ACCESS TABLE ── */
+  .access-table-wrap { margin: 28px 0; overflow-x: auto; }
+
+  .access-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .access-table thead tr {
+    background: var(--white);
+  }
+
+  .access-table thead th {
+    padding: 12px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--black);
+    text-align: center;
+  }
+  .access-table thead th:first-child { text-align: left; }
+
+  .access-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: background 0.12s;
+  }
+  .access-table tbody tr:hover { background: rgba(255,255,255,0.03); }
+  .access-table tbody tr:last-child { border-bottom: none; }
+
+  .access-table td {
+    padding: 12px 16px;
+    color: rgba(255,255,255,0.7);
+    text-align: center; vertical-align: middle;
+  }
+  .access-table td:first-child {
+    text-align: left; color: rgba(255,255,255,0.85);
+    font-weight: 400;
+  }
+
+  .check { color: var(--green); font-size: 15px; font-weight: 600; }
+  .cross { color: rgba(255,255,255,0.2); font-size: 15px; }
+  .own   {
+    color: var(--blue); font-size: 11px; font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .na {
+    font-size: 11px; color: rgba(255,255,255,0.2);
+    font-style: italic;
+  }
+
+  /* ── RIGHTS GRID ── */
+  .rights-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1px; background: var(--border-solid);
+    border: 1px solid var(--border-solid);
+    margin: 20px 0;
+  }
+  .right-card {
+    background: var(--black);
+    padding: 20px 22px;
+  }
+  .right-card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--white); margin-bottom: 6px;
+  }
+  .right-card p {
+    font-size: 12px; color: rgba(255,255,255,0.5);
+    margin-bottom: 0; line-height: 1.6;
+  }
+
+  /* ── RETENTION TABLE ── */
+  .retention-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; margin: 20px 0;
+  }
+  .retention-table tr { border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .retention-table tr:last-child { border-bottom: none; }
+  .retention-table td { padding: 12px 0; vertical-align: top; }
+  .retention-table td:first-child {
+    width: 55%; color: rgba(255,255,255,0.75);
+    font-weight: 400; padding-right: 24px;
+  }
+  .retention-table td:last-child {
+    color: var(--blue); font-weight: 500;
+    font-size: 12px;
+  }
+
+  /* ── CONTACT BLOCK ── */
+  .contact-block {
+    border: 1px solid var(--border);
+    padding: 28px 32px;
+    display: flex; gap: 32px; align-items: flex-start;
+    margin-top: 20px;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: var(--gray-dark);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contact-details h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 15px; font-weight: 700;
+    color: var(--white); margin-bottom: 6px;
+  }
+  .contact-details p { font-size: 13px; margin-bottom: 4px; }
+  .contact-details a {
+    color: var(--blue); text-decoration: none;
+  }
+  .contact-details a:hover { text-decoration: underline; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 24px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  footer p {
+    font-size: 11px; color: var(--gray);
+    margin-bottom: 0; font-weight: 400;
+  }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 11px; color: var(--gray);
+    text-decoration: none; letter-spacing: 0.06em;
+    transition: color 0.15s;
+  }
+  .footer-links a:hover { color: var(--white); }
+
+  /* ── BACK TO TOP ── */
+  .back-top {
+    position: fixed; bottom: 32px; right: 32px; z-index: 50;
+    width: 40px; height: 40px;
+    background: var(--white); color: var(--black);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .back-top.visible { opacity: 1; pointer-events: all; }
+  .back-top:hover { background: var(--blue); color: var(--white); }
+
+  /* ── SCROLL INDICATOR ── */
+  .scroll-line {
+    position: fixed; top: 61px; left: 0; right: 0;
+    height: 2px; background: var(--gray-dark); z-index: 99;
+  }
+  .scroll-fill {
+    height: 100%; background: var(--blue);
+    width: 0%; transition: width 0.1s linear;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .page-wrap { grid-template-columns: 1fr; }
+    aside { display: none; }
+    main { padding: 40px 24px 80px; }
+    .meta-strip { grid-template-columns: 1fr; }
+    .meta-item { border-right: none; border-bottom: 1px solid var(--border); }
+    .rights-grid { grid-template-columns: 1fr; }
+    header { padding: 16px 20px; }
+  }
+
+  /* ── ANIMATIONS ── */
+  .section { animation: fadeUp 0.5s ease both; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .section:nth-child(2)  { animation-delay: 0.05s; }
+  .section:nth-child(3)  { animation-delay: 0.10s; }
+  .section:nth-child(4)  { animation-delay: 0.15s; }
+  .section:nth-child(5)  { animation-delay: 0.20s; }
+  .section:nth-child(6)  { animation-delay: 0.25s; }
+</style>
+</head>
+<body>
+
+<!-- SCROLL LINE -->
+<div class="scroll-line"><div class="scroll-fill" id="scrollFill"></div></div>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="/">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="14" cy="14" r="13" stroke="white" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="7" stroke="white" stroke-width="1.5"/>
+      <path d="M14 1V7M14 21V27M1 14H7M21 14H27" stroke="white" stroke-width="1.5"/>
+      <circle cx="14" cy="14" r="2.5" fill="white"/>
+    </svg>
+    Circuit
+  </a>
+  <div class="header-right">
+    <span class="header-tag">Cohort 1 · 2026</span>
+    <a class="header-apply" href="/eoi">Apply →</a>
+  </div>
+</header>
+
+<div class="page-wrap">
+
+  <!-- SIDEBAR NAV -->
+  <aside id="sidebar">
+    <div class="aside-label">Overview</div>
+    <a class="nav-link active" href="#overview" data-section="overview">Overview</a>
+    <a class="nav-link" href="#who-we-are" data-section="who-we-are">Who We Are</a>
+    <a class="nav-link" href="#access" data-section="access">Data Access</a>
+
+    <div class="aside-label">Founders</div>
+    <a class="nav-link" href="#founders" data-section="founders">Founder Terms</a>
+    <a class="nav-link sub" href="#founders">EOI — Stage 1</a>
+    <a class="nav-link sub" href="#founders">Full Application</a>
+    <a class="nav-link sub" href="#founders">Data Room</a>
+
+    <div class="aside-label">Investors</div>
+    <a class="nav-link" href="#investors" data-section="investors">Investor Terms</a>
+    <a class="nav-link sub" href="#investors">Application Data</a>
+    <a class="nav-link sub" href="#investors">Non-Disclosure</a>
+    <a class="nav-link sub" href="#investors">Expressed Interest</a>
+
+    <div class="aside-label">General</div>
+    <a class="nav-link" href="#data-use" data-section="data-use">How We Use Data</a>
+    <a class="nav-link" href="#retention" data-section="retention">Retention</a>
+    <a class="nav-link" href="#rights" data-section="rights">Your Rights</a>
+    <a class="nav-link" href="#security" data-section="security">Security</a>
+    <a class="nav-link" href="#changes" data-section="changes">Changes</a>
+    <a class="nav-link" href="#contact" data-section="contact">Contact</a>
+
+    <div class="aside-version">
+      <strong>Version 1.0</strong>
+      April 2026<br>
+      Governing law: Singapore PDPA 2012
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="colour-band">
+        <span style="background:var(--red)"></span>
+        <span style="background:var(--blue)"></span>
+        <span style="background:var(--green)"></span>
+        <span style="background:var(--white)"></span>
+      </div>
+
+      <div class="hero-eyebrow">
+        <div class="accent-dot"></div>
+        <span>Privacy & Data Use Agreement</span>
+      </div>
+
+      <h1>Your data.<br>Your terms.</h1>
+
+      <p class="hero-sub">
+        Circuit is built on trust. This page explains exactly what information we collect, who can see it, and how it is used — before you submit a single word.
+      </p>
+
+      <div class="meta-strip">
+        <div class="meta-item">
+          <div class="meta-item-label">Issued by</div>
+          <div class="meta-item-value">NewCampus × Base</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Version</div>
+          <div class="meta-item-value">1.0 — April 2026</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-item-label">Governing law</div>
+          <div class="meta-item-value">Singapore PDPA 2012</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="section" id="overview">
+      <div class="section-header">
+        <span class="section-number">01</span>
+        <h2 class="section-title">Overview</h2>
+      </div>
+
+      <p>Circuit is a six-sprint accelerator programme for Southeast Asian Web3 founders, organised by NewCampus in partnership with Base (Coinbase's Layer 2 blockchain network). This agreement governs how personal data, business information, and application content submitted to Circuit is collected, stored, used, and shared.</p>
+
+      <p>This page covers two participant groups. Use the toggle below to highlight the terms most relevant to you — or read the full document for a complete picture.</p>
+
+      <div class="audience-toggle">
+        <button class="toggle-btn" id="btn-all" onclick="setAudience('all')">All</button>
+        <button class="toggle-btn" id="btn-founders" onclick="setAudience('founders')">Founders</button>
+        <button class="toggle-btn" id="btn-investors" onclick="setAudience('investors')">Investors</button>
+      </div>
+
+      <div class="callout blue">
+        <div class="callout-body">
+          <div class="callout-label">Before you apply</div>
+          <p>Please read this document carefully before submitting your application. By proceeding, you confirm that you have read, understood, and agreed to the terms set out here.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHO WE ARE -->
+    <div class="section" id="who-we-are">
+      <div class="section-header">
+        <span class="section-number">02</span>
+        <h2 class="section-title">Who We Are</h2>
+      </div>
+
+      <p>Circuit is operated by NewCampus ('we', 'us', 'our'). NewCampus is the named organiser of the programme and the data controller responsible for all personal data collected through Circuit's application process and programme operations.</p>
+
+      <p>Base (Coinbase) participates as a technology and ecosystem partner. Base personnel will have access to certain application data for the purposes of programme review and founder evaluation, as described in this agreement.</p>
+
+      <div class="callout gray">
+        <div class="callout-body">
+          <div class="callout-label">Important</div>
+          <p>NewCampus is the sole data controller. Base is a data recipient acting in an advisory and evaluation capacity. Neither party will sell, rent, or commercially exploit participant data.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCESS TABLE -->
+    <div class="section" id="access">
+      <div class="section-header">
+        <span class="section-number">03</span>
+        <h2 class="section-title">Data Access — Who Sees What</h2>
+      </div>
+
+      <p>Circuit operates a strict lateral privacy model. The table below defines exactly who can access each category of information you submit.</p>
+
+      <div class="access-table-wrap">
+        <table class="access-table">
+          <thead>
+            <tr>
+              <th>Data / Information</th>
+              <th>Base & NC</th>
+              <th>Other Founders</th>
+              <th>Investors</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>EOI answers & profile</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="own">Own only</span></td>
+              <td><span class="cross">—</span></td>
+            </tr>
+            <tr>
+              <td>GitHub & social links</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="own">Own only</span></td>
+              <td><span class="cross">—</span></td>
+            </tr>
+            <tr>
+              <td>Intro video (if submitted)</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="own">Own only</span></td>
+              <td><span class="cross">—</span></td>
+            </tr>
+            <tr>
+              <td>Stage 2 application answers</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="own">Own only</span></td>
+              <td><span class="cross">—</span></td>
+            </tr>
+            <tr>
+              <td>Cap table & financial data</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="own">Own only</span></td>
+              <td><span class="cross">—</span></td>
+            </tr>
+            <tr>
+              <td>Data room founder profile</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="own">Own only</span></td>
+              <td><span class="check">✓</span></td>
+            </tr>
+            <tr>
+              <td>Investor application answers</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">—</span></td>
+              <td><span class="own">Own only</span></td>
+            </tr>
+            <tr>
+              <td>Investor expressed interest</td>
+              <td><span class="check">✓</span></td>
+              <td><span class="cross">—</span></td>
+              <td><span class="cross">—</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p style="font-size:12px; color:rgba(255,255,255,0.35); font-style:italic;">'Own only' means you can view your own submission only. You will not have access to any other participant's data, regardless of your role in the programme.</p>
+
+      <div class="callout blue">
+        <div class="callout-body">
+          <div class="callout-label">For investors</div>
+          <p>Your application details, investment preferences, cheque size, and expressed interest in specific founders are never shared with other investors or with founders. This information is visible to Base and NewCampus only.</p>
+        </div>
+      </div>
+
+      <div class="callout green">
+        <div class="callout-body">
+          <div class="callout-label">For founders</div>
+          <p>Your financial data, cap table, and fundraising details are not collected at the EOI stage. These are requested only in Stage 2, after shortlisting, with your explicit consent at that point.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOUNDER TERMS -->
+    <div class="section founder-only" id="founders">
+      <div class="section-header">
+        <span class="section-number">04</span>
+        <h2 class="section-title">Founder Terms</h2>
+      </div>
+
+      <h3>4.1 Stage 1 — Expression of Interest (EOI)</h3>
+      <p>At the EOI stage, we collect only what is needed to assess your fit for the programme:</p>
+      <ul>
+        <li>Identity: full name, role, email address, company name, country of incorporation</li>
+        <li>Online presence: LinkedIn profile, GitHub handle, X/Twitter and other social links</li>
+        <li>Product information: one-liner, current stage, sector, blockchain network</li>
+        <li>Traction: qualitative description of community or user base; fundraising and TGE intentions</li>
+        <li>Residency commitment: availability and ability to self-fund the in-person residency week</li>
+        <li>Video (optional): a short intro video submitted via link (e.g. Loom)</li>
+        <li>Fit: reasons for applying to Circuit; referral source</li>
+      </ul>
+      <p>EOI data is visible to Base and NewCampus only. It will not be shared with other founders, investors, or third parties.</p>
+
+      <h3>4.2 Stage 2 — Full Application (Invited Applicants Only)</h3>
+      <p>Founders who are shortlisted will be invited to complete a full application. This stage collects more detailed information, including financial data, cap table, fundraising details, token and TGE plans, and team information.</p>
+
+      <div class="callout red">
+        <div class="callout-body">
+          <div class="callout-label">Explicit consent required</div>
+          <p>Stage 2 data will not be collected without your explicit, named, and timestamped consent. A consent declaration will be presented at the point of submission. You may withdraw from the process at any time before submitting.</p>
+        </div>
+      </div>
+
+      <h3>4.3 Data Room Access</h3>
+      <p>Upon acceptance into Circuit Cohort 1, a curated founder profile will be made available to invited investors via the Circuit Data Room. This profile is derived from your application and will include your company name, sector, product description, stage, traction summary, fundraising ask, and team overview.</p>
+      <p>You will be informed before your profile is made visible in the data room, and you will have the opportunity to review and approve your profile content prior to publication.</p>
+    </div>
+
+    <!-- INVESTOR TERMS -->
+    <div class="section investor-only" id="investors">
+      <div class="section-header">
+        <span class="section-number">05</span>
+        <h2 class="section-title">Investor Terms</h2>
+      </div>
+
+      <h3>5.1 Application Data</h3>
+      <p>Investors applying to Circuit submit identity and professional information, investment profile details (AUM, cheque size, stage focus, sector preferences), geographic focus, Web3 investment experience, and logistics availability. Investor application data is visible to Base and NewCampus only — never to founders or other investors.</p>
+
+      <h3>5.2 Data Room Access & Non-Disclosure Obligation</h3>
+
+      <div class="callout red">
+        <div class="callout-body">
+          <div class="callout-label">Non-disclosure obligation</div>
+          <p>All information in the Circuit Data Room — including founder profiles, financial data, cap tables, and fundraising details — is strictly confidential. By accessing the data room, you agree not to share, forward, screenshot, reproduce, or otherwise disclose this information to any third party without the prior written consent of NewCampus and the relevant founder.</p>
+        </div>
+      </div>
+
+      <p>Specifically, investors agree that they will not:</p>
+      <ul>
+        <li>Share data room content with colleagues, partners, or other investors not approved by Circuit</li>
+        <li>Use data room information for purposes other than evaluating investment opportunities within Circuit</li>
+        <li>Contact founders directly using information obtained from the data room without Circuit's facilitation</li>
+        <li>Retain copies of data room content beyond the programme duration without the founder's explicit consent</li>
+      </ul>
+
+      <p>A separate click-wrap confirmation of these obligations will be presented at the point of data room access. Access is not granted until this confirmation is completed.</p>
+
+      <h3>5.3 Expressed Interest</h3>
+      <p>Investors may indicate interest in specific founders through the Circuit platform. These expressions of interest are visible to Base and NewCampus only, not visible to other investors, and not disclosed to founders until Circuit facilitates a formal introduction.</p>
+    </div>
+
+    <!-- DATA USE -->
+    <div class="section" id="data-use">
+      <div class="section-header">
+        <span class="section-number">06</span>
+        <h2 class="section-title">How We Use Your Data</h2>
+      </div>
+
+      <p>Data collected through Circuit is used solely for the following purposes:</p>
+      <ul>
+        <li>Programme administration — reviewing applications, shortlisting candidates, managing cohort operations</li>
+        <li>Evaluation — enabling Base and NewCampus to assess founder and investor fit</li>
+        <li>Matching — facilitating introductions between accepted founders and approved investors</li>
+        <li>Communication — programme updates, scheduling, and feedback</li>
+      </ul>
+
+      <p>We do not use participant data for marketing, advertising, commercial profiling, data brokering, or training AI or machine learning models.</p>
+    </div>
+
+    <!-- RETENTION -->
+    <div class="section" id="retention">
+      <div class="section-header">
+        <span class="section-number">07</span>
+        <h2 class="section-title">Data Retention</h2>
+      </div>
+
+      <table class="retention-table">
+        <tr>
+          <td>EOI submissions (unsuccessful)</td>
+          <td>Deleted or anonymised within 12 months</td>
+        </tr>
+        <tr>
+          <td>Stage 2 applications (unsuccessful)</td>
+          <td>Deleted or anonymised within 12 months of outcome notification</td>
+        </tr>
+        <tr>
+          <td>Accepted founder data</td>
+          <td>Retained for programme duration + up to 24 months for alumni tracking</td>
+        </tr>
+        <tr>
+          <td>Investor data</td>
+          <td>Retained while engaged across cohorts, or up to 24 months from last engagement</td>
+        </tr>
+      </table>
+
+      <p>You may request deletion of your data at any time. Requests will be processed within 30 days.</p>
+    </div>
+
+    <!-- RIGHTS -->
+    <div class="section" id="rights">
+      <div class="section-header">
+        <span class="section-number">08</span>
+        <h2 class="section-title">Your Rights</h2>
+      </div>
+
+      <p>Under Singapore's Personal Data Protection Act (PDPA) 2012, you have the right to:</p>
+
+      <div class="rights-grid">
+        <div class="right-card">
+          <div class="right-card-title">Access</div>
+          <p>Request a copy of the personal data we hold about you.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-card-title">Correction</div>
+          <p>Request that inaccurate or incomplete data be corrected.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-card-title">Withdrawal</div>
+          <p>Withdraw consent to data processing at any time, without affecting prior processing.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-card-title">Deletion</div>
+          <p>Request that your data be deleted, subject to any legal retention obligations.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-card-title">Portability</div>
+          <p>Request your data in a structured, machine-readable format.</p>
+        </div>
+        <div class="right-card">
+          <div class="right-card-title">Objection</div>
+          <p>Object to processing of your data for specific purposes.</p>
+        </div>
+      </div>
+
+      <p>To exercise any of these rights, contact the Circuit programme team at the email address provided in your application confirmation.</p>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="section" id="security">
+      <div class="section-header">
+        <span class="section-number">09</span>
+        <h2 class="section-title">Security</h2>
+      </div>
+
+      <ul>
+        <li>Access controls — programme data is accessible only to authorised Base and NewCampus personnel on a need-to-know basis</li>
+        <li>Secure hosting — all application and data room infrastructure is hosted on platforms with industry-standard security certifications</li>
+        <li>No public exposure — no participant data is published publicly or indexed by search engines</li>
+      </ul>
+
+      <p>In the event of a data breach likely to affect your rights or interests, we will notify you as soon as practicable and in accordance with applicable law.</p>
+    </div>
+
+    <!-- CHANGES -->
+    <div class="section" id="changes">
+      <div class="section-header">
+        <span class="section-number">10</span>
+        <h2 class="section-title">Changes to This Agreement</h2>
+      </div>
+
+      <p>We may update this agreement from time to time. If material changes are made, we will notify all active participants by email at least 14 days before the changes take effect. Continued participation in Circuit following notification constitutes acceptance of the updated terms.</p>
+      <p>The current version of this page is always the governing version. Version history is available on request.</p>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="section" id="contact">
+      <div class="section-header">
+        <span class="section-number">11</span>
+        <h2 class="section-title">Contact</h2>
+      </div>
+
+      <p>For questions about this agreement or your data rights:</p>
+
+      <div class="contact-block">
+        <div class="contact-icon">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <rect x="1" y="3" width="16" height="12" rx="1" stroke="white" stroke-opacity="0.5" stroke-width="1.2"/>
+            <path d="M1 5L9 10L17 5" stroke="white" stroke-opacity="0.5" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="contact-details">
+          <h4>Circuit Programme Team — NewCampus</h4>
+          <p><a href="mailto:circuit@newcampus.com">circuit@newcampus.com</a></p>
+          <p style="color:rgba(255,255,255,0.35); font-size:12px;">Response within 5 business days · Data requests processed within 30 days</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 NewCampus × Circuit · All rights reserved · Version 1.0</p>
+  <div class="footer-links">
+    <a href="/eoi">Apply as Founder</a>
+    <a href="/investor-apply">Apply as Investor</a>
+    <a href="/">Home</a>
+  </div>
+</footer>
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <path d="M7 12V2M2 7L7 2L12 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<script>
+  // ── SCROLL PROGRESS ──
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    const total = document.body.scrollHeight - window.innerHeight;
+    document.getElementById('scrollFill').style.width = (scrolled / total * 100) + '%';
+
+    // back to top
+    document.getElementById('backTop').classList.toggle('visible', scrolled > 400);
+
+    // active nav
+    const sections = document.querySelectorAll('.section[id]');
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    document.querySelectorAll('.nav-link[data-section]').forEach(l => {
+      l.classList.toggle('active', l.dataset.section === current);
+    });
+  });
+
+  // ── AUDIENCE TOGGLE ──
+  function setAudience(type) {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + type).classList.add('active');
+
+    const fo = document.querySelectorAll('.founder-only');
+    const io = document.querySelectorAll('.investor-only');
+
+    if (type === 'founders') {
+      fo.forEach(e => e.style.opacity = '1');
+      io.forEach(e => e.style.opacity = '0.3');
+    } else if (type === 'investors') {
+      fo.forEach(e => e.style.opacity = '0.3');
+      io.forEach(e => e.style.opacity = '1');
+    } else {
+      fo.forEach(e => e.style.opacity = '1');
+      io.forEach(e => e.style.opacity = '1');
+    }
+  }
+
+  // default
+  setAudience('all');
+  document.getElementById('btn-all').classList.add('active');
+</script>
+
+</body>
+</html>
